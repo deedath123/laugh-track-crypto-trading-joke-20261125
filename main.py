@@ -24,8 +24,17 @@ def validate(text: str) -> None:
         raise ValueError(f"entry too long: {len(text)} > {MAX_LEN}")
 
 
+def validate_single_line(text: str) -> None:
+    for bad in ("\n", "\r"):
+        if bad in text:
+            raise ValueError("entry must be a single line")
+    if len(text) < 10:
+        raise ValueError("entry is too short to be a single line")
+
+
 def main() -> int:
     validate(ENTRY)
+    validate_single_line(ENTRY)
     out_dir = os.environ.get("OUTPUT_DIR", "/output")
     os.makedirs(out_dir, exist_ok=True)
     path = os.path.join(out_dir, "entry.txt")
